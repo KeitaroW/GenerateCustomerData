@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Uebung04_GenerateCustomerData
 {
-    class Program
+    class GenerateCustomerData
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+
         }
     }
 }
