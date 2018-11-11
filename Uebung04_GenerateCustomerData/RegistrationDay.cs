@@ -108,7 +108,7 @@ namespace Uebung04_GenerateCustomerData
             {
                 file = new StreamWriter("customers_" + registrationDate.ToString("yyyyMMdd") + ".txt");
             }
-            file.Write("CustomerID\tFirstName\tFamily\tGender\tFederalState\tCity");
+            file.Write("CustomerID\tFirstName\tFamily\tGender\tFederalState\tCity\n");
             for (int i = index * rows; i < (index + 1) * rows; i++)
             {
                 var testCustomers = new Faker<Customer>()
