@@ -1,15 +1,15 @@
-DELETE FROM catering..CustomerHistory
+DELETE FROM sales..CustomerHistory
 WHERE RecordStartDate >= 
 	(
 		SELECT max(FileDate)
-		FROM catering..CustomerTmp
+		FROM sales..CustomerTmp
 	);
 
-UPDATE catering..CustomerHistory
+UPDATE sales..CustomerHistory
 SET RecordEndDate = '9999-12-31'
 WHERE RecordEndDate = (
 						SELECT dateadd(day,-1, max(FileDate))
-						FROM catering..CustomerTmp
+						FROM sales..CustomerTmp
 					);
 
 

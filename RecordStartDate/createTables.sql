@@ -9,6 +9,7 @@ if not exists
 CREATE TABLE CustomerHistory(
 	CustomerID INTEGER,
 	FirstName VARCHAR(50),
+	LastName VARCHAR(50),
 	Gender VARCHAR(20),
 	Family VARCHAR(50),
 	FederalState VARCHAR(50),

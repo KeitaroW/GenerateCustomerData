@@ -24,7 +24,7 @@ FROM(
 UPDATE CustomerHistory
 SET RecordEndDate = (
 						SELECT dateadd(day,-1, max(FileDate))
-						FROM catering..CustomerTmp
+						FROM sales..CustomerTmp
 					)
 WHERE RecordEndDate = '9999-12-31'
 AND
@@ -39,7 +39,7 @@ CustomerID in
 UPDATE CustomerHistory
 SET RecordEndDate = (
 						SELECT dateadd(day,-1, max(FileDate))
-						FROM catering..CustomerTmp
+						FROM sales..CustomerTmp
 					)
 WHERE RecordEndDate = '9999-12-31'
 AND

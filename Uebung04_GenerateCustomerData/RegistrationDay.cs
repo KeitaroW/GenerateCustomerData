@@ -12,7 +12,7 @@ namespace Uebung04_GenerateCustomerData
 {
     class Customer
     {
-        int userId;
+        int customerId;
 
         string firstName;
 
@@ -28,12 +28,12 @@ namespace Uebung04_GenerateCustomerData
 
         DateTime recordEndDate;
 
-        public Customer(int userId)
+        public Customer(int customerId)
         {
-            UserId = userId;
+            CustomerId = customerId;
         }
 
-        public int UserId { get => userId; set => userId = value; }
+        public int CustomerId { get => customerId; set => customerId = value; }
         public string FirstName { get => firstName; set => firstName = value; }
         public Gender Gender { get => gender; set => gender = value; }
         public string Family { get => family; set => family = value; }
@@ -41,6 +41,36 @@ namespace Uebung04_GenerateCustomerData
         public string City { get => city; set => city = value; }
         public DateTime RecordStartDate { get => recordStartDate; set => recordStartDate = value; }
         public DateTime RecordEndDate { get => recordEndDate; set => recordEndDate = value; }
+    }
+
+    class ChooseRandom
+    {
+        bool family;
+        bool federalState;
+        bool city;
+
+        public ChooseRandom(Random rnd)
+        {
+            while (!family && !federalState && !city)
+            {
+                if (rnd.NextDouble() < 1.0d / 3.0d)
+                {
+                    Family = true;
+                }
+                if (rnd.NextDouble() < 1.0d / 3.0d)
+                {
+                    FederalState = true;
+                }
+                if (rnd.NextDouble() < 1.0d / 3.0d)
+                {
+                    City = true;
+                }
+            }
+        }
+
+        public bool Family { get => family; set => family = value; }
+        public bool FederalState { get => federalState; set => federalState = value; }
+        public bool City { get => city; set => city = value; }
     }
 
     class RegistrationDay
@@ -64,9 +94,10 @@ namespace Uebung04_GenerateCustomerData
             this.path = path;
         }
 
-        public void GenerateCustomerData()
+        public List<Customer> GenerateCustomerData(List<Customer> changeData)
         {
             List<Customer> customers = new List<Customer>();
+            List<Customer> changedChangeData = new List<Customer>(changeData);
             registrationDate = new DateTime(registrationDate.Year, registrationDate.Month, registrationDate.Day, 0, 0, 0);
             StreamWriter file;
             if (path != null)
@@ -77,10 +108,10 @@ namespace Uebung04_GenerateCustomerData
             {
                 file = new StreamWriter("customers_" + registrationDate.ToString("yyyyMMdd") + ".txt");
             }
-            file.Write("CustomerID\tFirstName\tGender\tFamily\tFederalState\tCity\tRecordStartDate\tRecordEndDate");
+            file.Write("CustomerID\tFirstName\tFamily\tGender\tFederalState\tCity");
             for (int i = index * rows; i < (index + 1) * rows; i++)
             {
-                var testCustomerss = new Faker<Customer>()
+                var testCustomers = new Faker<Customer>()
                     //Optional: Call for objects that have complex initialization
                     .CustomInstantiator(f => new Customer(i))
                     //Use an enum outside scope.
@@ -88,29 +119,66 @@ namespace Uebung04_GenerateCustomerData
                     //Basic rules using built-in generators
                     .RuleFor(u => u.FirstName, (f, u) => f.Name.FirstName(u.Gender))
                     .RuleFor(u => u.Family, (f, u) => f.Name.LastName(u.Gender))
-                    .RuleFor(u => u.Loginname, (f, u) => f.Internet.UserName(u.FirstName, u.LastName))
-                    .RuleFor(u => u.Password, (f, u) => f.Internet.Password())
+                    .RuleFor(u => u.FederalState, (f, u) => f.Address.State())
+                    .RuleFor(u => u.City, (f, u) => f.Address.City())
                     //Optional: After all rules are applied finish with the following action
                     .FinishWith((f, u) =>
                     {
-                        Console.WriteLine("Customer Created! Id={0}", u.UserId);
+                        Console.WriteLine("Customer Created! Id={0}", u.CustomerId);
                     });
-                
                 customers.Add(testCustomers.Generate());
             }
             Console.WriteLine("File: " + (index + 1));
-            accounts.Sort((x, y) => DateTime.Compare(x.RegistrationDate, y.RegistrationDate));
-            int id = index * rows;
-            foreach (Account account in accounts)
+            Customer newCustomer;
+            ChooseRandom random;
+            foreach (Customer customer in changeData)
             {
-                account.Id = id;
-                file.Write(account.Id + "\t" + account.Loginname + "\t" + account.Password + "\t" + account.RegistrationDate.ToString("yyyy-MM-dd hh:mm:ss.fff") + "\t" + account.LastLoginDate.ToString(/*"yyyyMMddHHmmss" yyyy-MM-dd hh:mm:ss.fff yyyy-MM-ddTHH:mm:ss*/"yyyy-MM-dd hh:mm:ss.fff") + "\t" +
-                    account.CharacterName + "\t" + account.Nation + "\t" + account.Geartype + "\t" + account.Level + "\t" + account.Levelpercentage.ToString("0.##") + "\t" + account.Spi +
-                    "\t" + account.Credits + "\t" + account.Fame + "\t" + account.Brigade + "\t" + account.Attack + "\t" + account.Defence + "\t" + account.Evasion + "\t" +
-                    account.Fuel + "\t" + account.Spirit + "\t" + account.Shield + "\t" + account.UnusedStatpoints + "\n");
-                id++;
+                random = new ChooseRandom(rnd);
+                if (rnd.NextDouble() < 0.1d)
+                {
+                    var testCustomers = new Faker<Customer>()
+                    //Optional: Call for objects that have complex initialization
+                        .CustomInstantiator(f => new Customer(customer.CustomerId))
+                        //Use an enum outside scope.
+                        .RuleFor(u => u.Gender, f => f.PickRandom<Gender>())
+                        //Basic rules using built-in generators
+                        .RuleFor(u => u.FirstName, (f, u) => f.Name.FirstName(u.Gender))
+                        .RuleFor(u => u.Family, (f, u) => f.Name.LastName(u.Gender))
+                        .RuleFor(u => u.FederalState, (f, u) => f.Address.State())
+                        .RuleFor(u => u.City, (f, u) => f.Address.City())
+                        //Optional: After all rules are applied finish with the following action
+                        .FinishWith((f, u) =>
+                        {
+                            Console.WriteLine("Customer Created! Id={0}", u.CustomerId);
+                        });
+                    newCustomer = testCustomers.Generate();
+                    newCustomer.FirstName = customer.FirstName;
+                    if (!random.Family)
+                        newCustomer.Family = customer.Family;
+                    if (!random.FederalState)
+                    {
+                        newCustomer.FederalState = customer.FederalState;
+                        if (!random.City)
+                            newCustomer.City = customer.City;
+                    }
+                    changedChangeData.Remove(customer);
+                    file.Write(newCustomer.CustomerId + "\t" + newCustomer.FirstName + "\t" + newCustomer.Family + "\t" + newCustomer.Gender + "\t" + newCustomer.FederalState + "\t" + newCustomer.City + "\n");
+                    if (rnd.NextDouble() < 0.1d)
+                    {
+                        changedChangeData.Add(newCustomer);
+                    }
+                }
+            }
+            foreach (Customer customer in customers)
+            {
+                if (rnd.NextDouble() < 0.1d)
+                {
+                    changedChangeData.Add(customer);
+                }
+                file.Write(customer.CustomerId + "\t" + customer.FirstName + "\t" + customer.Family + "\t" + customer.Gender + "\t" + customer.FederalState + "\t" + customer.City + "\n");
             }
             file.Close();
+            return changedChangeData;
         }
     }
 }
