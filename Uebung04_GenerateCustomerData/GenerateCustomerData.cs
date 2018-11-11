@@ -20,9 +20,10 @@ namespace Uebung04_GenerateCustomerData
                 int rowsPerDay = Int32.Parse(args[4]);
                 DateTime dateTime = new DateTime(year, month, day);
                 List<Customer> changeData = new List<Customer>();
+                RegistrationDay registrationDay;
                 for (int i = 0; i < numOfDays; i++)
                 {
-                    RegistrationDay registrationDay = new RegistrationDay(rowsPerDay, i, dateTime, rnd);
+                    registrationDay = new RegistrationDay(rowsPerDay, i, dateTime, rnd);
                     changeData = registrationDay.GenerateCustomerData(changeData);
                     dateTime = dateTime.AddDays(1);
                 }
@@ -38,9 +39,10 @@ namespace Uebung04_GenerateCustomerData
                 int rowsPerDay = Int32.Parse(args[5]);
                 DateTime dateTime = new DateTime(year, month, day);
                 List<Customer> changeData = new List<Customer>();
+                RegistrationDay registrationDay;
                 for (int i = 0; i < numOfDays; i++)
                 {
-                    RegistrationDay registrationDay = new RegistrationDay(rowsPerDay, i, dateTime, rnd, args[0]);
+                    registrationDay = new RegistrationDay(rowsPerDay, i, dateTime, rnd, args[0]);
                     changeData = registrationDay.GenerateCustomerData(changeData);
                     dateTime = dateTime.AddDays(1);
                 }
