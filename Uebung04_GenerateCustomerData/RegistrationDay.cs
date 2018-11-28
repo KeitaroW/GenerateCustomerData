@@ -100,13 +100,16 @@ namespace Uebung04_GenerateCustomerData
             List<Customer> changedChangeData = new List<Customer>(changeData);
             registrationDate = new DateTime(registrationDate.Year, registrationDate.Month, registrationDate.Day, 0, 0, 0);
             StreamWriter file;
+            StreamWriter changed;
             if (path != null)
             {
-                file = new StreamWriter(Path.Combine(path, "customers_" + registrationDate.ToString("yyyyMMdd") + ".txt"));
+                file = new StreamWriter(Path.Combine(path, "customerHistory_" + registrationDate.ToString("yyyyMMdd") + ".txt"));
+                changed = new StreamWriter(Path.Combine(path, "customers_" + registrationDate.ToString("yyyyMMdd") + ".txt"));
             }
             else
             {
-                file = new StreamWriter("customers_" + registrationDate.ToString("yyyyMMdd") + ".txt");
+                file = new StreamWriter("customerHistory_" + registrationDate.ToString("yyyyMMdd") + ".txt");
+                changed = new StreamWriter("customers_" + registrationDate.ToString("yyyyMMdd") + ".txt");
             }
             file.Write("CustomerID\tFirstName\tFamily\tGender\tFederalState\tCity\n");
             for (int i = index * rows; i < (index + 1) * rows; i++)
@@ -162,7 +165,8 @@ namespace Uebung04_GenerateCustomerData
                             newCustomer.City = customer.City;
                     }
                     changedChangeData.Remove(customer);
-                    file.Write(newCustomer.CustomerId + "\t" + newCustomer.FirstName + "\t" + newCustomer.Family + "\t" + newCustomer.Gender + "\t" + newCustomer.FederalState + "\t" + newCustomer.City + "\n");
+                    changed.Write(newCustomer.CustomerId + "\t" + newCustomer.FirstName + "\t" + newCustomer.Family + "\t" + newCustomer.Gender + "\t" + newCustomer.FederalState + "\t" + newCustomer.City + "\n");
+                    newCustomer.Gender = customer.Gender;
                     if (rnd.NextDouble() < 0.1d)
                     {
                         changedChangeData.Add(newCustomer);
