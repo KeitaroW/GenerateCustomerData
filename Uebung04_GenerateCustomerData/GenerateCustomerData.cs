@@ -38,12 +38,12 @@ namespace Uebung04_GenerateCustomerData
                 int numOfDays = Int32.Parse(args[4]);
                 int rowsPerDay = Int32.Parse(args[5]);
                 DateTime dateTime = new DateTime(year, month, day);
-                List<Customer> changeData = new List<Customer>();
+                List<Customer> customers = new List<Customer>();
                 RegistrationDay registrationDay;
                 for (int i = 0; i < numOfDays; i++)
                 {
                     registrationDay = new RegistrationDay(rowsPerDay, i, dateTime, rnd, args[0]);
-                    changeData = registrationDay.GenerateCustomerData(changeData);
+                    customers = registrationDay.GenerateCustomerData(customers);
                     dateTime = dateTime.AddDays(1);
                 }
                 Console.Read();

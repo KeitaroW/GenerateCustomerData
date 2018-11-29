@@ -14,7 +14,7 @@ CREATE TABLE CustomerHistory(
 	FederalState VARCHAR(50),
 	City VARCHAR(50),
 	RecordStartDate Date,
-	RecordEndDate Date DEFAULT '9999-12-31',
+	RecordEndDate Date,
 	CONSTRAINT PK_CUSTOMER_HISTORY PRIMARY KEY (CustomerID, RecordStartDate)
 )
 
