@@ -108,7 +108,7 @@ namespace Uebung04_GenerateCustomerData
             foreach (Customer customer in customers)
             {
                 random = new ChooseRandom(rnd);
-                if (rnd.NextDouble() < 0.01d)
+                if (rnd.NextDouble() < 0.003d)
                 {
                     var testCustomers = new Faker<Customer>()
                     //Optional: Call for objects that have complex initialization
