@@ -169,15 +169,19 @@ namespace Uebung04_GenerateCustomerData
             Console.WriteLine("File: " + (index + 1));
             foreach (Customer customer in customers)
             {
-                if (changedData.Exists(c => c.CustomerId == customer.CustomerId))
+                if (rnd.NextDouble() > 0.001d)
                 {
-                    Customer changed = changedData.Find(c => c.CustomerId == customer.CustomerId);
-                    merged.Add(changed);
-                    file.Write(changed.CustomerId + "\t" + changed.FirstName + "\t" + changed.Family + "\t" + changed.Gender + "\t" + changed.FederalState + "\t" + changed.City + "\n");
-                } else
-                {
-                    merged.Add(customer);
-                    file.Write(customer.CustomerId + "\t" + customer.FirstName + "\t" + customer.Family + "\t" + customer.Gender + "\t" + customer.FederalState + "\t" + customer.City + "\n");
+                    if (changedData.Exists(c => c.CustomerId == customer.CustomerId))
+                    {
+                        Customer changed = changedData.Find(c => c.CustomerId == customer.CustomerId);
+                        merged.Add(changed);
+                        file.Write(changed.CustomerId + "\t" + changed.FirstName + "\t" + changed.Family + "\t" + changed.Gender + "\t" + changed.FederalState + "\t" + changed.City + "\n");
+                    }
+                    else
+                    {
+                        merged.Add(customer);
+                        file.Write(customer.CustomerId + "\t" + customer.FirstName + "\t" + customer.Family + "\t" + customer.Gender + "\t" + customer.FederalState + "\t" + customer.City + "\n");
+                    }
                 }
             }
             file.Close();
