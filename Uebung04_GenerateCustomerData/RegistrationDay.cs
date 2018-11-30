@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Bogus;
-using Bogus.DataSets;
 using static Bogus.DataSets.Name;
 
 namespace Uebung04_GenerateCustomerData
@@ -125,10 +121,13 @@ namespace Uebung04_GenerateCustomerData
                         .RuleFor(u => u.FederalState, (f, u) => f.Address.State())
                         .RuleFor(u => u.City, (f, u) => f.Address.City())
                         //Optional: After all rules are applied finish with the following action
+                        #if DEBUG
                         .FinishWith((f, u) =>
                         {
                             Console.WriteLine("Customer Created! Id={0}", u.CustomerId);
-                        });
+                        })
+                        #endif
+                        ;
                     newCustomer = testCustomers.Generate();
                     newCustomer.FirstName = customer.FirstName;
                     if (!random.Family)
@@ -157,10 +156,13 @@ namespace Uebung04_GenerateCustomerData
                     .RuleFor(u => u.FederalState, (f, u) => f.Address.State())
                     .RuleFor(u => u.City, (f, u) => f.Address.City())
                     //Optional: After all rules are applied finish with the following action
+                    #if DEBUG
                     .FinishWith((f, u) =>
                     {
                         Console.WriteLine("Customer Created! Id={0}", u.CustomerId);
-                    });
+                    })
+                    #endif
+                    ;
                 customers.Add(testCustomers.Generate());
             }
             List<Customer> merged = new List<Customer>();
